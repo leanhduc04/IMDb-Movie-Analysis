@@ -1675,12 +1675,18 @@ with tab7:
         predicted_revenue = linear_model.predict(input_data)[0]
 
         st.divider()
-
-        st.metric(
-            "Doanh thu dự đoán",
-            f"{predicted_revenue:,.2f} triệu USD"
-        )
-
+        
+        if predicted_revenue < 0:
+            st.warning(
+                "Mô hình dự đoán doanh thu âm. "
+                "Kết quả này không có ý nghĩa thực tế, "
+                "cho thấy hạn chế của Linear Regression."
+            )
+        else:
+            st.metric(
+                "Doanh thu dự đoán",
+                f"{predicted_revenue:,.2f} triệu USD"
+            )
 
 with tab8:
     st.subheader("Dữ liệu phim IMDb")
