@@ -1619,16 +1619,16 @@ with tab7:
         with col1:
             year = st.number_input(
                 "Năm phát hành",
-                min_value=int(df["Year"].min()),
-                max_value=int(df["Year"].max()),
+                min_value=1900,
+                max_value=2100,
                 value=int(df["Year"].median()),
                 step=1
             )
-
+            
             runtime = st.number_input(
                 "Thời lượng phim (phút)",
-                min_value=int(df["Runtime"].min()),
-                max_value=int(df["Runtime"].max()),
+                min_value=1,
+                max_value=500,
                 value=int(df["Runtime"].median()),
                 step=1
             )
