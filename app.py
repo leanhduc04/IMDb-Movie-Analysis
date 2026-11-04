@@ -119,6 +119,61 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
+# TẢI LÊN FILE CSV MỚI
+uploaded_file = st.file_uploader(
+    "Tải lên file CSV mới",
+    type=["csv"]
+)
+
+if uploaded_file is not None:
+    try:
+        uploaded_df = pd.read_csv(uploaded_file)
+
+        if uploaded_df.empty:
+            st.error("File CSV không có dữ liệu. Vui lòng chọn file khác.")
+            st.stop()
+
+        required_columns = [
+            "Title", "Genre", "Year", "Runtime",
+            "Rating", "Votes", "Revenue", "Metascore",
+            "Director", "Actors", "Description"
+        ]
+
+        missing_columns = [
+            col for col in required_columns
+            if col not in uploaded_df.columns
+        ]
+
+        if missing_columns:
+            st.error(
+                "File CSV không hợp lệ. Thiếu cột: "
+                + ", ".join(missing_columns)
+            )
+            st.stop()
+
+        df = uploaded_df.copy()
+
+        numeric_columns = [
+            "Year", "Runtime", "Rating",
+            "Votes", "Revenue", "Metascore"
+        ]
+
+        for col in numeric_columns:
+            df[col] = pd.to_numeric(
+                df[col],
+                errors="coerce"
+            )
+
+        st.success(
+            f"Tải dữ liệu thành công! Có {len(df):,} bộ phim."
+        )
+
+    except Exception as e:
+        st.error(f"Không thể đọc file CSV: {e}")
+        st.stop()
+
+
 # Các chỉ số tổng quan
 total_movies = len(df)
 avg_rating = df["Rating"].mean()
